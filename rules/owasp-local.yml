@@ -1,0 +1,66 @@
+rules:
+  - id: hardcoded-session-secret
+    languages: [python]
+    severity: ERROR
+    message: Session secret is hard-coded; read it from an environment variable.
+    pattern-regex: 'app\.secret_key\s*=\s*["''][^"'']+["'']'
+
+  - id: hardcoded-gateway-token
+    languages: [python]
+    severity: ERROR
+    message: Gateway token is hard-coded; read it from an environment variable.
+    pattern-regex: 'GATEWAY_TOKEN\s*=\s*["''][^"'']+["'']'
+
+  - id: md5-receipt
+    languages: [python]
+    severity: ERROR
+    message: MD5 is unsuitable for secure receipt identifiers; use HMAC-SHA256.
+    pattern: hashlib.md5(...)
+
+  - id: sql-fstring
+    languages: [python]
+    severity: ERROR
+    message: SQL query interpolates input; use a parameterized query.
+    pattern-regex: 'db\(\)\.execute\(f["''].*\{[^}]+\}.*["'']\)'
+
+  - id: unsafe-receipt-path
+    languages: [python]
+    severity: ERROR
+    message: User-controlled file paths may enable path traversal.
+    pattern: send_file("receipts/" + request.args.get("file"))
+
+  - id: unsafe-eval
+    languages: [python]
+    severity: ERROR
+    message: eval on request input can execute attacker-controlled expressions.
+    pattern: eval(...)
+
+  - id: unsafe-pickle
+    languages: [python]
+    severity: ERROR
+    message: Do not deserialize untrusted request data using pickle.
+    pattern: pickle.loads(request.data)
+
+  - id: unsafe-template-concatenation
+    languages: [python]
+    severity: ERROR
+    message: Do not concatenate user input into a template.
+    pattern: render_template_string($X + $Y)
+
+  - id: requests-tls-disabled
+    languages: [python]
+    severity: WARNING
+    message: TLS certificate verification must remain enabled.
+    pattern: requests.post(..., verify=False, ...)
+
+  - id: flask-debug-enabled
+    languages: [python]
+    severity: WARNING
+    message: Disable Flask debug mode outside controlled development.
+    pattern: app.run(..., debug=True, ...)
+
+  - id: flask-open-binding
+    languages: [python]
+    severity: WARNING
+    message: Bind the development application to loopback for local testing.
+    pattern: app.run(..., host="0.0.0.0", ...)
