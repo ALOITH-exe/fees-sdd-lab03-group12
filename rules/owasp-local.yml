@@ -64,3 +64,10 @@ rules:
     severity: WARNING
     message: Bind the development application to loopback for local testing.
     pattern: app.run(..., host="0.0.0.0", ...)
+
+  - id: hardcoded-password-literal
+    languages: [python]
+    severity: WARNING
+    message: Password-like literal requires a context review.
+    pattern-regex: |
+      (?i)\b\w*PASSWORD\w*\s*=\s*["'][^"']+["']
