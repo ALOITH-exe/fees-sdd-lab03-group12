@@ -21,7 +21,7 @@ rules:
     languages: [python]
     severity: ERROR
     message: SQL query interpolates input; use a parameterized query.
-    pattern-regex: 'db\(\)\.execute\(f["''].*\{[^}]+\}.*["'']\)'
+    pattern-regex: 'db\(\)\.execute\(\s*f["''].*\{[^}]+\}.*["'']\s*\)'
 
   - id: unsafe-receipt-path
     languages: [python]
